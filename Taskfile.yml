@@ -2,4 +2,6 @@ version: '3'
 
 tasks:
   check:
+    cmd: bunx biome check --write ./apps/**
+  check.unsafe:
     cmd: bunx biome check --write ./apps/** --unsafe

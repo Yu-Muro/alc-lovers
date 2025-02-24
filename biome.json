@@ -7,13 +7,18 @@
     },
     "files": {
         "ignoreUnknown": false,
-        "ignore": []
+        "include": [
+            "**/*.ts",
+            "**/*.tsx",
+            "**/*.mjs"
+        ]
     },
     "formatter": {
         "enabled": true,
         "indentStyle": "space",
         "indentWidth": 4,
-        "lineWidth": 80
+        "lineWidth": 80,
+        "lineEnding": "lf"
     },
     "organizeImports": {
         "enabled": true
@@ -34,6 +39,7 @@
     "javascript": {
         "formatter": {
             "quoteStyle": "single",
+            "jsxQuoteStyle": "single",
             "semicolons": "always"
         }
     }

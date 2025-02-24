@@ -1,8 +1,8 @@
 {
-	"name": "sample-app",
-	"private": true,
-	"workspaces": ["apps/*"],
-	"devDependencies": {
-		"@biomejs/biome": "1.9.4"
-	}
+    "name": "sample-app",
+    "private": true,
+    "workspaces": ["apps/*"],
+    "devDependencies": {
+        "@biomejs/biome": "1.9.4"
+    }
 }

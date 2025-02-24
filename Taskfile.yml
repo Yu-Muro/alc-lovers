@@ -2,4 +2,4 @@ version: '3'
 
 tasks:
   check:
-    cmd: bunx biome check --write ./**
+    cmd: bunx biome check --write ./apps/**

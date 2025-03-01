@@ -5,3 +5,7 @@ tasks:
     cmd: bunx biome check --write ./apps/**
   check.unsafe:
     cmd: bunx biome check --write ./apps/** --unsafe
+  dev.frontend:
+    cmd: cd apps/frontend && bun run dev
+  dev.backend:
+    cmd: cd apps/backend && bun run dev

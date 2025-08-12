@@ -1,5 +1,6 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
+import { createTodoRoutes } from './presentation/routes/todoRoutes';
 
 const app = new Hono();
 
@@ -9,9 +10,9 @@ app.use(
         origin: '*',
     }),
 );
-const route = app.get('/hello', (c) => {
-    return c.json({ message: 'Hello Hono!' });
-});
-export type AppType = typeof route;
 
-export default app;
+const appWithRoutes = app.route('/', createTodoRoutes());
+
+export type AppType = typeof appWithRoutes;
+
+export default appWithRoutes;

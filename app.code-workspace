@@ -1,0 +1,35 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "cSpell.ignorePaths": [
+            ".git/**",
+            "*.code-workspace",
+            ".vscode",
+            ".vscode-insiders",
+            "vscode-extension",
+            "**/settings.json",
+            "**/.gitignore",
+            "**.log",
+            "**/build/**",
+            "node_modules",
+            "package-lock.json",
+            "package.json",
+            "bun.lock"
+        ],
+		"[typescript]": {
+			"editor.defaultFormatter": "biomejs.biome",
+			"editor.formatOnSave": true
+		},
+		"[typescriptreact]": {
+			"editor.defaultFormatter": "biomejs.biome",
+			"editor.formatOnSave": true
+		},
+		"editor.codeActionsOnSave": {
+			"source.organizeImports.biome": "explicit"
+		}
+    }
+}

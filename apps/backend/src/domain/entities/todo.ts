@@ -5,4 +5,13 @@ export const todoSchema = z.object({
     description: z.string().nullable(),
 });
 
-export type Todo = z.infer<typeof todoSchema>;
+export interface Todo {
+    id: string;
+    title: string;
+    description: string | null;
+    completed: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+export type CreateTodoInput = z.infer<typeof todoSchema>;

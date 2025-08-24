@@ -18,8 +18,14 @@
             "node_modules",
             "package-lock.json",
             "package.json",
-            "bun.lock"
+            "bun.lock",
+            ".env*"
         ],
+        "files.exclude": {
+            "**/node_modules": true,
+            "**/.next": true,
+            "**/.wrangler": true
+        },
 		"[typescript]": {
 			"editor.defaultFormatter": "biomejs.biome",
 			"editor.formatOnSave": true

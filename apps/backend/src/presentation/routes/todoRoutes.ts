@@ -7,7 +7,8 @@ export const createTodoRoutes = () => {
     const todoController = new TodoController();
 
     router.get('/hello', (c) => todoController.getHello(c));
-    router.post('/todo', todoValidator, (c) => todoController.createTodo(c));
+    router.get('/todos', (c) => todoController.getTodos(c));
+    router.post('/todos', todoValidator, (c) => todoController.createTodo(c));
 
     return router;
 };

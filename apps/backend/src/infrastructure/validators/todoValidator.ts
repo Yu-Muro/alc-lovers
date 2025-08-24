@@ -7,7 +7,13 @@ export const todoValidator = zValidator(
     todoSchema,
     (result, c: Context) => {
         if (!result.success) {
-            return c.text(result.error.issues[0].message, 400);
+            return c.json(
+                {
+                    error: 'Validation failed',
+                    details: result.error.issues,
+                },
+                400,
+            );
         }
     },
 );

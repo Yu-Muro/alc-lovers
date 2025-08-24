@@ -1,9 +1,14 @@
 {
     "$schema": "node_modules/wrangler/config-schema.json",
-    "name": "backend",
+    "name": "alc-lovers",
     "main": "src/index.ts",
     "compatibility_date": "2025-02-24",
     "compatibility_flags": [
         "nodejs_compat"
-    ]
+    ],
+    "env": {
+        "dev": {
+            "name": "alc-lovers-dev"
+        }
+    }
 }

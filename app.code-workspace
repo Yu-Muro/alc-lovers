@@ -18,11 +18,13 @@
             "node_modules",
             "package.json",
             "bun.lock",
-            ".env*"
+            ".env*",
+            "**/.open-next/**"
         ],
         "files.exclude": {
             "**/.wrangler": true,
-            "**/.open-next": true
+            "**/.open-next": true,
+            "**/.next": true
         },
 		"[typescript]": {
 			"editor.defaultFormatter": "biomejs.biome",

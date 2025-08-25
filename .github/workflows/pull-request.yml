@@ -97,12 +97,6 @@ jobs:
           bun run lint
         continue-on-error: true
 
-      - name: Format check frontend
-        run: |
-          cd apps/frontend
-          bun run format
-        continue-on-error: true
-
       - name: Type check frontend
         run: |
           cd apps/frontend
@@ -122,7 +116,7 @@ jobs:
         continue-on-error: true
 
   build-cloudflare-frontend:
-    needs: detect-changes
+    needs: [lint-and-test-frontend]
     if: |
       needs.detect-changes.outputs.frontend-changed == 'true' ||
       needs.detect-changes.outputs.shared-changed == 'true'

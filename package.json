@@ -1,5 +1,5 @@
 {
-    "name": "sample-app",
+    "name": "alc-lovers",
     "private": true,
     "workspaces": ["apps/*"],
     "devDependencies": {

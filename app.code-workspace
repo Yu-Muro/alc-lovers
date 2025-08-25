@@ -22,9 +22,10 @@
             ".env*"
         ],
         "files.exclude": {
-            "**/node_modules": true,
-            "**/.next": true,
-            "**/.wrangler": true
+            "**/.DS_Store": false,
+            "**/.git": false,
+            "**/.wrangler": true,
+            "**/Thumbs.db": false
         },
 		"[typescript]": {
 			"editor.defaultFormatter": "biomejs.biome",

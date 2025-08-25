@@ -1,4 +1,4 @@
-import type { Todo } from '../../domain/entities/todo';
+import type { CreateTodoInput, Todo } from '../../domain/entities/todo';
 
 export interface TodoRepository {
     save(todo: Todo): Promise<Todo>;
@@ -9,7 +9,7 @@ export interface TodoRepository {
 export class CreateTodoUseCase {
     constructor(private todoRepository: TodoRepository) {}
 
-    async execute(todoData: Omit<Todo, 'id'>): Promise<Todo> {
+    async execute(todoData: CreateTodoInput): Promise<Todo> {
         // ビジネスルールの検証
         if (!todoData.title || todoData.title.trim().length < 2) {
             throw new Error('Title must be at least 2 characters long');

@@ -11,7 +11,7 @@ app.use(
     }),
 );
 
-const appWithRoutes = app.route('/', createTodoRoutes());
+const appWithRoutes = app.route('/api', createTodoRoutes());
 
 export type AppType = typeof appWithRoutes;
 

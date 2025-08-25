@@ -2,18 +2,28 @@
 
 import { useActionState } from 'react';
 import { client } from '@/app/utils/client';
+import type { CreateTodoRequest } from './types/api';
 
 export default function Home() {
     const formAction = async (prevError: string | null, formData: FormData) => {
         const title = formData.get('title') as string;
         const description = formData.get('description') as string;
-        const res = await client.todo.$post({
-            json: { title, description },
+
+        const requestData: CreateTodoRequest = { title, description };
+        const res = await client.api.todos.$post({
+            json: requestData,
         });
+
         if (!res.ok) {
             const error = await res.text();
             return error;
         }
+
+        const response = await res.json();
+        if (!response.success) {
+            return response.error || 'Failed to create todo';
+        }
+
         return null;
     };
     const [error, submitAction, isPending] = useActionState(formAction, null);

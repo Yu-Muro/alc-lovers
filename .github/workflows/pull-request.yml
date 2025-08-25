@@ -1,5 +1,8 @@
 name: Pull Request Build & Test
 
+env:
+  NEXT_PUBLIC_API_URL: http://localhost:8080
+
 on:
   pull_request:
     branches:

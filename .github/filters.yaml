@@ -3,39 +3,32 @@
 
 # Backend filters - TypeScript and configuration files
 backend:
-  - apps/backend/**
+  - "apps/backend/**"
   - "!apps/backend/**/*.md"
   - "!apps/backend/**/*.txt"
   - "!apps/backend/**/*.log"
 
 # Frontend filters - TypeScript, JSX, and configuration files
 frontend:
-  - apps/frontend/**
+  - "apps/frontend/**"
   - "!apps/frontend/**/*.md"
   - "!apps/frontend/**/*.txt"
   - "!apps/frontend/**/*.log"
 
-# Shared configuration files that affect both backend and frontend
-shared:
-  - package.json
-  - bun.lock
-  - biome.json
-  - .github/workflows/**
-  - docs/**
-
 # Documentation changes
 docs:
-  - docs/**
-  - README.md
+  - "docs/**"
+  - "README.md"
   - "*.md"
-  - "docs/*.md"
 
 # Configuration changes
 config:
-  - biome.json
-  - tsconfig.json
-  - wrangler.jsonc
-  - .github/**
+  - "biome.json"
+  - "tsconfig.json"
+  - "wrangler.jsonc"
+  - "package.json"
+  - "bun.lock"
+  - ".github/**"
 
 # TypeScript files specifically
 typescript:

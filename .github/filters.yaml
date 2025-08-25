@@ -39,12 +39,12 @@ config:
 
 # TypeScript files specifically
 typescript:
-  - *.ts
-  - *.tsx
+  - "*.ts"
+  - "*.tsx"
   - "!**/*.d.ts"
 
 # JavaScript files specifically
 javascript:
-  - *.js
-  - *.jsx
-  - *.mjs
+  - "*.js"
+  - "*.jsx"
+  - "*.mjs"

@@ -68,11 +68,9 @@ jobs:
           workingDirectory: apps/backend
           secrets: |
             DATABASE_URL
-            NEXT_PUBLIC_API_URL
           environment: dev
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
 
       - name: Notify deployment
         run: |
@@ -99,7 +97,7 @@ jobs:
           cd apps/frontend
           bun install
 
-      - name: Build and deploy to Cloudflare Pages (Dev)
+      - name: Build and deploy to Cloudflare Workers (Dev)
         id: deploy-frontend
         uses: cloudflare/wrangler-action@v3
         with:
@@ -111,7 +109,7 @@ jobs:
             NEXT_PUBLIC_API_URL
           environment: dev
         env:
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL_DEV }}
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
 
       - name: Notify deployment
         run: |

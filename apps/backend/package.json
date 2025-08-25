@@ -5,7 +5,12 @@
     "scripts": {
         "dev": "wrangler dev --port 8080",
         "deploy": "wrangler deploy --env prod --minify",
-        "deploy:dev": "wrangler deploy --env dev --minify"
+        "deploy:dev": "wrangler deploy --env dev --minify",
+        "build": "wrangler deploy --dry-run",
+        "lint": "biome check ./src",
+        "lint:fix": "biome check --write --unsafe ./src",
+        "type-check": "tsc --noEmit",
+        "test": "echo 'No tests configured yet'"
     },
     "dependencies": {
         "@hono/zod-validator": "^0.7.2",

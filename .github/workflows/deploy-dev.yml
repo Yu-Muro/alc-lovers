@@ -97,6 +97,11 @@ jobs:
           cd apps/frontend
           bun install
 
+      - name: Build frontend
+        run: |
+          cd apps/frontend
+          bun run build:cloudflare
+
       - name: Build and deploy to Cloudflare Workers (Dev)
         id: deploy-frontend
         uses: cloudflare/wrangler-action@v3

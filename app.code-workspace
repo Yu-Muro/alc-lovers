@@ -16,16 +16,13 @@
             "**.log",
             "**/build/**",
             "node_modules",
-            "package-lock.json",
             "package.json",
             "bun.lock",
             ".env*"
         ],
         "files.exclude": {
-            "**/.DS_Store": false,
-            "**/.git": false,
             "**/.wrangler": true,
-            "**/Thumbs.db": false
+            "**/.open-next": true
         },
 		"[typescript]": {
 			"editor.defaultFormatter": "biomejs.biome",

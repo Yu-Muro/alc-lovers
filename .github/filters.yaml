@@ -1,0 +1,50 @@
+# Paths filter configuration for alc-lovers project
+# This file defines which files trigger which workflows
+
+# Backend filters - TypeScript and configuration files
+backend:
+  - apps/backend/**
+  - "!apps/backend/**/*.md"
+  - "!apps/backend/**/*.txt"
+  - "!apps/backend/**/*.log"
+
+# Frontend filters - TypeScript, JSX, and configuration files
+frontend:
+  - apps/frontend/**
+  - "!apps/frontend/**/*.md"
+  - "!apps/frontend/**/*.txt"
+  - "!apps/frontend/**/*.log"
+
+# Shared configuration files that affect both backend and frontend
+shared:
+  - package.json
+  - bun.lock
+  - biome.json
+  - .github/workflows/**
+  - docs/**
+
+# Documentation changes
+docs:
+  - docs/**
+  - README.md
+  - "*.md"
+  - "docs/*.md"
+
+# Configuration changes
+config:
+  - biome.json
+  - tsconfig.json
+  - wrangler.jsonc
+  - .github/**
+
+# TypeScript files specifically
+typescript:
+  - "*.ts"
+  - "*.tsx"
+  - "!**/*.d.ts"
+
+# JavaScript files specifically
+javascript:
+  - "*.js"
+  - "*.jsx"
+  - "*.mjs"

@@ -1,0 +1,206 @@
+name: Pull Request Build & Test
+
+env:
+  NEXT_PUBLIC_API_URL: http://localhost:8080
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+    types: [opened, synchronize, reopened]
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      backend-changed: ${{ steps.filter.outputs.backend }}
+      frontend-changed: ${{ steps.filter.outputs.frontend }}
+      shared-changed: ${{ steps.filter.outputs.shared }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect changes
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: .github/filters.yaml
+
+  lint-and-test-backend:
+    needs: detect-changes
+    if: |
+      needs.detect-changes.outputs.backend-changed == 'true' ||
+      needs.detect-changes.outputs.shared-changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: |
+          cd apps/backend
+          bun install
+
+      - name: Lint backend code
+        run: |
+          cd apps/backend
+          bun run lint
+        continue-on-error: true
+
+      - name: Type check backend
+        run: |
+          cd apps/backend
+          bun run type-check
+        continue-on-error: true
+
+      - name: Test backend
+        run: |
+          cd apps/backend
+          bun run test
+        continue-on-error: true
+
+      - name: Build backend
+        run: |
+          cd apps/backend
+          bun run build
+
+  lint-and-test-frontend:
+    needs: detect-changes
+    if: |
+      needs.detect-changes.outputs.frontend-changed == 'true' ||
+      needs.detect-changes.outputs.shared-changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: |
+          cd apps/frontend
+          bun install
+
+      - name: Lint frontend code
+        run: |
+          cd apps/frontend
+          bun run lint
+        continue-on-error: true
+
+      - name: Type check frontend
+        run: |
+          cd apps/frontend
+          bun run type-check
+        continue-on-error: true
+
+      - name: Test frontend
+        run: |
+          cd apps/frontend
+          bun run test
+        continue-on-error: true
+
+      - name: Build frontend
+        run: |
+          cd apps/frontend
+          bun run build
+
+  build-cloudflare-frontend:
+    needs: [lint-and-test-frontend]
+    if: |
+      needs.detect-changes.outputs.frontend-changed == 'true' ||
+      needs.detect-changes.outputs.shared-changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: |
+          cd apps/frontend
+          bun install
+
+      - name: Build for Cloudflare
+        run: |
+          cd apps/frontend
+          bun run build:cloudflare
+
+  notify-no-changes:
+    needs: detect-changes
+    if: |
+      needs.detect-changes.outputs.backend-changed == 'false' &&
+      needs.detect-changes.outputs.frontend-changed == 'false'
+    runs-on: ubuntu-latest
+    steps:
+      - name: No changes detected
+        run: |
+          echo "ℹ️ No changes detected in backend or frontend"
+          echo "Skipping build and test processes"
+
+  # Dependabot auto-approve job
+  dependabot-auto-approve:
+    if: github.actor == 'dependabot[bot]'
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [lint-and-test-backend, lint-and-test-frontend, build-cloudflare-frontend]
+    steps:
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v2
+        with:
+          github-token: '${{ secrets.GITHUB_TOKEN }}'
+
+      - name: Show update type
+        run: |
+          echo "Update type: ${{ steps.metadata.outputs.update-type }}"
+          echo "Package ecosystem: ${{ steps.metadata.outputs.package-ecosystem }}"
+          echo "Package name: ${{ steps.metadata.outputs.package-name }}"
+
+      - name: Approve PR
+        if: ${{ steps.metadata.outputs.update-type != 'version-update:semver-major' }}
+        run: gh pr review --approve "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Enable auto-merge for Dependabot PRs
+        if: ${{ steps.metadata.outputs.update-type != 'version-update:semver-major' }}
+        run: gh pr merge --auto --merge "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Comment on major updates
+        if: ${{ steps.metadata.outputs.update-type == 'version-update:semver-major' }}
+        run: |
+          gh pr comment "$PR_URL" --body "⚠️ **Major version update detected** ⚠️
+
+          This is a major version update that may include breaking changes. Please review manually before merging.
+
+          **Update Details:**
+          - Package: ${{ steps.metadata.outputs.package-name }}
+          - Ecosystem: ${{ steps.metadata.outputs.package-ecosystem }}
+          - Update Type: ${{ steps.metadata.outputs.update-type }}"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -5,7 +5,10 @@ import { client } from '@/app/utils/client';
 import type { CreateTodoRequest } from './types/api';
 
 export default function Home() {
-    const formAction = async (prevError: string | null, formData: FormData) => {
+    const formAction = async (
+        _prevError: string | null,
+        formData: FormData,
+    ) => {
         const title = formData.get('title') as string;
         const description = formData.get('description') as string;
 
@@ -30,31 +33,31 @@ export default function Home() {
 
     return (
         <div className='mt-10'>
-            <h1 className='text-3xl font-bold text-center'>Todo</h1>
+            <h1 className='text-center font-bold text-3xl'>Todo</h1>
             <form
                 action={submitAction}
-                className='flex flex-col gap-2 max-w-[600px] mx-auto mt-10'
+                className='mx-auto mt-10 flex max-w-[600px] flex-col gap-2'
             >
-                <label htmlFor='title' className='text-sm font-medium'>
+                <label htmlFor='title' className='font-medium text-sm'>
                     Title
                 </label>
                 <input
                     type='text'
                     name='title'
-                    className='border-2 border-gray-300 rounded-md p-2'
+                    className='rounded-md border-2 border-gray-300 p-2'
                 />
-                <label htmlFor='description' className='text-sm font-medium'>
+                <label htmlFor='description' className='font-medium text-sm'>
                     Description
                 </label>
                 <input
                     type='text'
                     name='description'
-                    className='border-2 border-gray-300 rounded-md p-2'
+                    className='rounded-md border-2 border-gray-300 p-2'
                 />
                 <button
                     disabled={isPending}
                     type='submit'
-                    className='bg-blue-500 text-white p-2 rounded-md'
+                    className='rounded-md bg-blue-500 p-2 text-white'
                 >
                     Submit
                 </button>

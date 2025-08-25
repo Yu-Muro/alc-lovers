@@ -4,7 +4,7 @@
     "types": "src/index.ts",
     "scripts": {
         "dev": "wrangler dev --port 8080",
-        "deploy": "wrangler deploy --minify",
+        "deploy": "wrangler deploy --env prod --minify",
         "deploy:dev": "wrangler deploy --env dev --minify"
     },
     "dependencies": {

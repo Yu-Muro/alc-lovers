@@ -9,6 +9,9 @@
     "env": {
         "dev": {
             "name": "alc-lovers-dev"
+        },
+        "prod": {
+            "name": "alc-lovers"
         }
     }
 }

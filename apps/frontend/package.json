@@ -9,7 +9,7 @@
         "build:cloudflare": "opennextjs-cloudflare build",
         "dev": "bun run build:cloudflare && wrangler dev --port 8771",
         "preview": "bun run build:cloudflare && bun run dev",
-        "deploy": "bun run build:cloudflare && wrangler deploy",
+        "deploy": "bun run build:cloudflare && wrangler deploy --env prod",
         "deploy:dev": "bun run build:cloudflare && wrangler deploy --env dev"
     },
     "dependencies": {

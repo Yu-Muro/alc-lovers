@@ -1,0 +1,145 @@
+name: Deploy to Dev Environment
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      backend-changed: ${{ steps.backend-check.outputs.any_changed_backend }}
+      frontend-changed: ${{ steps.frontend-check.outputs.any_changed_frontend }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v46
+        with:
+          files: |
+            apps/backend/**
+            apps/frontend/**
+
+      - name: Check backend changes
+        id: backend-check
+        run: |
+          if echo "${{ steps.changed-files.outputs.all_changed_files }}" | grep -q "^apps/backend/"; then
+            echo "any_changed_backend=true" >> $GITHUB_OUTPUT
+          else
+            echo "any_changed_backend=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check frontend changes
+        id: frontend-check
+        run: |
+          if echo "${{ steps.changed-files.outputs.all_changed_files }}" | grep -q "^apps/frontend/"; then
+            echo "any_changed_frontend=true" >> $GITHUB_OUTPUT
+          else
+            echo "any_changed_frontend=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Show changed files
+        run: |
+          echo "All changed files:"
+          echo "${{ steps.changed-files.outputs.all_changed_files }}"
+          echo ""
+          echo "Backend changes: ${{ steps.backend-check.outputs.any_changed_backend }}"
+          echo "Frontend changes: ${{ steps.frontend-check.outputs.any_changed_frontend }}"
+
+  deploy-backend:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.backend-changed == 'true' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: |
+          cd apps/backend
+          bun install
+
+      - name: Deploy to Cloudflare Workers (Dev)
+        id: deploy-backend
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy --env dev
+          workingDirectory: apps/backend
+          secrets: |
+            DATABASE_URL
+            NEXT_PUBLIC_API_URL
+          environment: dev
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+
+      - name: Notify deployment
+        run: |
+          echo "✅ Backend deployed to dev environment successfully!"
+          echo "Worker: alc-lovers-dev"
+          echo "Deployment URL: ${{ steps.deploy-backend.outputs.deployment-url }}"
+
+  deploy-frontend:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.frontend-changed == 'true' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: |
+          cd apps/frontend
+          bun install
+
+      - name: Build and deploy to Cloudflare Pages (Dev)
+        id: deploy-frontend
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy --env dev
+          workingDirectory: apps/frontend
+          secrets: |
+            NEXT_PUBLIC_API_URL
+          environment: dev
+        env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL_DEV }}
+
+      - name: Notify deployment
+        run: |
+          echo "✅ Frontend deployed to dev environment successfully!"
+          echo "Worker: alc-lovers-frontend-dev"
+          echo "Deployment URL: ${{ steps.deploy-frontend.outputs.deployment-url }}"
+
+  notify-no-changes:
+    needs: detect-changes
+    if: |
+      needs.detect-changes.outputs.backend-changed == 'false' &&
+      needs.detect-changes.outputs.frontend-changed == 'false' &&
+      github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: No changes detected
+        run: |
+          echo "ℹ️ No changes detected in backend or frontend"
+          echo "Skipping deployment to dev environment"

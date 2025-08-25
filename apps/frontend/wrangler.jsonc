@@ -12,6 +12,9 @@
     "env": {
         "dev": {
             "name": "alc-lovers-frontend-dev"
+        },
+        "prod": {
+            "name": "alc-lovers-frontend"
         }
     }
 }

@@ -9,47 +9,35 @@ jobs:
   detect-changes:
     runs-on: ubuntu-latest
     outputs:
-      backend-changed: ${{ steps.backend-check.outputs.any_changed_backend }}
-      frontend-changed: ${{ steps.frontend-check.outputs.any_changed_frontend }}
+      backend-changed: ${{ steps.filter.outputs.backend }}
+      frontend-changed: ${{ steps.filter.outputs.frontend }}
+      shared-changed: ${{ steps.filter.outputs.shared }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v46
+      - name: Detect changes
+        id: filter
+        uses: dorny/paths-filter@v3
         with:
-          files: |
-            apps/backend/**
-            apps/frontend/**
-
-      - name: Check backend changes
-        id: backend-check
-        run: |
-          if echo "${{ steps.changed-files.outputs.all_changed_files }}" | grep -q "^apps/backend/"; then
-            echo "any_changed_backend=true" >> $GITHUB_OUTPUT
-          else
-            echo "any_changed_backend=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Check frontend changes
-        id: frontend-check
-        run: |
-          if echo "${{ steps.changed-files.outputs.all_changed_files }}" | grep -q "^apps/frontend/"; then
-            echo "any_changed_frontend=true" >> $GITHUB_OUTPUT
-          else
-            echo "any_changed_frontend=false" >> $GITHUB_OUTPUT
-          fi
+          filters: .github/filters.yaml
 
       - name: Show changed files
         run: |
-          echo "All changed files:"
-          echo "${{ steps.changed-files.outputs.all_changed_files }}"
-          echo ""
-          echo "Backend changes: ${{ steps.backend-check.outputs.any_changed_backend }}"
-          echo "Frontend changes: ${{ steps.frontend-check.outputs.any_changed_frontend }}"
+          echo "Backend changes: ${{ steps.filter.outputs.backend }}"
+          echo "Frontend changes: ${{ steps.filter.outputs.frontend }}"
+
+          if [ "${{ steps.filter.outputs.backend }}" = "true" ]; then
+            echo "Changed backend files:"
+            echo "${{ steps.filter.outputs.backend_files }}"
+          fi
+
+          if [ "${{ steps.filter.outputs.frontend }}" = "true" ]; then
+            echo "Changed frontend files:"
+            echo "${{ steps.filter.outputs.frontend_files }}"
+          fi
 
   deploy-backend:
     needs: detect-changes

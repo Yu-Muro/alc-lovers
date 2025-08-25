@@ -1,0 +1,166 @@
+name: Pull Request Build & Test
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+    types: [opened, synchronize, reopened]
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      backend-changed: ${{ steps.filter.outputs.backend }}
+      frontend-changed: ${{ steps.filter.outputs.frontend }}
+      shared-changed: ${{ steps.filter.outputs.shared }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect changes
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: .github/filters.yaml
+
+  lint-and-test-backend:
+    needs: detect-changes
+    if: |
+      needs.detect-changes.outputs.backend-changed == 'true' ||
+      needs.detect-changes.outputs.shared-changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: |
+          cd apps/backend
+          bun install
+
+      - name: Lint backend code
+        run: |
+          cd apps/backend
+          bun run lint
+        continue-on-error: true
+
+      - name: Type check backend
+        run: |
+          cd apps/backend
+          bun run type-check
+        continue-on-error: true
+
+      - name: Test backend
+        run: |
+          cd apps/backend
+          bun run test
+        continue-on-error: true
+
+      - name: Build backend
+        run: |
+          cd apps/backend
+          bun run build
+
+  lint-and-test-frontend:
+    needs: detect-changes
+    if: |
+      needs.detect-changes.outputs.frontend-changed == 'true' ||
+      needs.detect-changes.outputs.shared-changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: |
+          cd apps/frontend
+          bun install
+
+      - name: Lint frontend code
+        run: |
+          cd apps/frontend
+          bun run lint
+        continue-on-error: true
+
+      - name: Format check frontend
+        run: |
+          cd apps/frontend
+          bun run format
+        continue-on-error: true
+
+      - name: Type check frontend
+        run: |
+          cd apps/frontend
+          bun run type-check
+        continue-on-error: true
+
+      - name: Test frontend
+        run: |
+          cd apps/frontend
+          bun run test
+        continue-on-error: true
+
+      - name: Build frontend
+        run: |
+          cd apps/frontend
+          bun run build
+        continue-on-error: true
+
+  build-cloudflare-frontend:
+    needs: detect-changes
+    if: |
+      needs.detect-changes.outputs.frontend-changed == 'true' ||
+      needs.detect-changes.outputs.shared-changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: |
+          cd apps/frontend
+          bun install
+
+      - name: Build for Cloudflare
+        run: |
+          cd apps/frontend
+          bun run build:cloudflare
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-build
+          path: apps/frontend/.open-next/
+          retention-days: 1
+
+  notify-no-changes:
+    needs: detect-changes
+    if: |
+      needs.detect-changes.outputs.backend-changed == 'false' &&
+      needs.detect-changes.outputs.frontend-changed == 'false'
+    runs-on: ubuntu-latest
+    steps:
+      - name: No changes detected
+        run: |
+          echo "ℹ️ No changes detected in backend or frontend"
+          echo "Skipping build and test processes"

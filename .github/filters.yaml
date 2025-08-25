@@ -27,7 +27,8 @@ shared:
 docs:
   - docs/**
   - README.md
-  - **/*.md
+  - "*.md"
+  - "docs/*.md"
 
 # Configuration changes
 config:

@@ -28,20 +28,14 @@ jobs:
         run: |
           echo "Backend changes: ${{ steps.filter.outputs.backend }}"
           echo "Frontend changes: ${{ steps.filter.outputs.frontend }}"
-
-          if [ "${{ steps.filter.outputs.backend }}" = "true" ]; then
-            echo "Changed backend files:"
-            echo "${{ steps.filter.outputs.backend_files }}"
-          fi
-
-          if [ "${{ steps.filter.outputs.frontend }}" = "true" ]; then
-            echo "Changed frontend files:"
-            echo "${{ steps.filter.outputs.frontend_files }}"
-          fi
+          echo "Shared changes: ${{ steps.filter.outputs.shared }}"
 
   deploy-backend:
     needs: detect-changes
-    if: needs.detect-changes.outputs.backend-changed == 'true' && github.event_name == 'push'
+    if: |
+      (needs.detect-changes.outputs.backend-changed == 'true' ||
+       needs.detect-changes.outputs.shared-changed == 'true') &&
+      github.event_name == 'push'
     runs-on: ubuntu-latest
     environment: dev
     steps:
@@ -80,7 +74,10 @@ jobs:
 
   deploy-frontend:
     needs: detect-changes
-    if: needs.detect-changes.outputs.frontend-changed == 'true' && github.event_name == 'push'
+    if: |
+      (needs.detect-changes.outputs.frontend-changed == 'true' ||
+       needs.detect-changes.outputs.shared-changed == 'true') &&
+      github.event_name == 'push'
     runs-on: ubuntu-latest
     environment: dev
     steps:
@@ -129,6 +126,7 @@ jobs:
     if: |
       needs.detect-changes.outputs.backend-changed == 'false' &&
       needs.detect-changes.outputs.frontend-changed == 'false' &&
+      needs.detect-changes.outputs.shared-changed == 'false' &&
       github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:

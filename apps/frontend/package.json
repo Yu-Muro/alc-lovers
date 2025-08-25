@@ -3,20 +3,25 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "dev": "next dev",
-        "build": "next build",
         "start": "next start",
-        "lint": "next lint"
+        "lint": "next lint",
+        "build": "next build",
+        "build:cloudflare": "opennextjs-cloudflare build",
+        "dev": "bun run build:cloudflare && wrangler dev --port 8771",
+        "preview": "bun run build:cloudflare && bun run dev",
+        "deploy": "bun run build:cloudflare && wrangler deploy",
+        "deploy:dev": "bun run build:cloudflare && wrangler deploy --env dev"
     },
     "dependencies": {
-        "hono": "^4.7.2",
+        "@opennextjs/cloudflare": "^1.6.5",
+        "hono": "^4.9.4",
+        "next": "15.1.7",
         "react": "^19.0.0",
-        "react-dom": "^19.0.0",
-        "next": "15.1.7"
+        "react-dom": "^19.0.0"
     },
     "devDependencies": {
         "@tailwindcss/postcss": "^4.1.11",
-        "@types/node": "^20",
+        "@types/node": "^24.3.0",
         "@types/react": "^19",
         "@types/react-dom": "^19",
         "postcss": "^8",

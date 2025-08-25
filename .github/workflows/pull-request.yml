@@ -37,21 +37,6 @@ jobs:
           echo "Frontend changes: ${{ steps.filter.outputs.frontend }}"
           echo "Shared changes: ${{ steps.filter.outputs.shared }}"
 
-          if [ "${{ steps.filter.outputs.backend }}" = "true" ]; then
-            echo "Changed backend files:"
-            echo "${{ steps.filter.outputs.backend_files }}"
-          fi
-
-          if [ "${{ steps.filter.outputs.frontend }}" = "true" ]; then
-            echo "Changed frontend files:"
-            echo "${{ steps.filter.outputs.frontend_files }}"
-          fi
-
-          if [ "${{ steps.filter.outputs.shared }}" = "true" ]; then
-            echo "Changed shared files:"
-            echo "${{ steps.filter.outputs.shared_files }}"
-          fi
-
   lint-and-test-backend:
     needs: detect-changes
     if: |

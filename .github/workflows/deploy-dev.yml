@@ -33,9 +33,8 @@ jobs:
   deploy-backend:
     needs: detect-changes
     if: |
-      (needs.detect-changes.outputs.backend-changed == 'true' ||
-       needs.detect-changes.outputs.shared-changed == 'true') &&
-      github.event_name == 'push'
+      needs.detect-changes.outputs.backend-changed == 'true' ||
+      needs.detect-changes.outputs.shared-changed == 'true'
     runs-on: ubuntu-latest
     environment: dev
     steps:
@@ -75,9 +74,8 @@ jobs:
   deploy-frontend:
     needs: detect-changes
     if: |
-      (needs.detect-changes.outputs.frontend-changed == 'true' ||
-       needs.detect-changes.outputs.shared-changed == 'true') &&
-      github.event_name == 'push'
+      needs.detect-changes.outputs.frontend-changed == 'true' ||
+      needs.detect-changes.outputs.shared-changed == 'true'
     runs-on: ubuntu-latest
     environment: dev
     steps:
@@ -126,8 +124,7 @@ jobs:
     if: |
       needs.detect-changes.outputs.backend-changed == 'false' &&
       needs.detect-changes.outputs.frontend-changed == 'false' &&
-      needs.detect-changes.outputs.shared-changed == 'false' &&
-      github.event_name == 'push'
+      needs.detect-changes.outputs.shared-changed == 'false'
     runs-on: ubuntu-latest
     steps:
       - name: No changes detected

@@ -4,13 +4,16 @@
     "private": true,
     "scripts": {
         "start": "next start",
-        "lint": "next lint",
+        "lint": "biome check ./app",
+        "lint:fix": "biome check --write --unsafe ./app",
         "build": "next build",
         "build:cloudflare": "opennextjs-cloudflare build",
         "dev": "bun run build:cloudflare && wrangler dev --port 8771",
         "preview": "bun run build:cloudflare && bun run dev",
         "deploy": "bun run build:cloudflare && wrangler deploy --env prod",
-        "deploy:dev": "bun run build:cloudflare && wrangler deploy --env dev"
+        "deploy:dev": "bun run build:cloudflare && wrangler deploy --env dev",
+        "type-check": "tsc --noEmit",
+        "test": "echo 'No tests configured yet'"
     },
     "dependencies": {
         "@opennextjs/cloudflare": "^1.6.5",

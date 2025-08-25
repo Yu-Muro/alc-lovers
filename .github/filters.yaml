@@ -15,29 +15,9 @@ frontend:
   - "!apps/frontend/**/*.txt"
   - "!apps/frontend/**/*.log"
 
-# Documentation changes
-docs:
-  - "docs/**"
-  - "README.md"
-  - "*.md"
-
-# Configuration changes
-config:
+# Shared configuration changes that affect both backend and frontend
+shared:
   - "biome.json"
-  - "tsconfig.json"
-  - "wrangler.jsonc"
   - "package.json"
   - "bun.lock"
-  - ".github/**"
-
-# TypeScript files specifically
-typescript:
-  - "*.ts"
-  - "*.tsx"
-  - "!**/*.d.ts"
-
-# JavaScript files specifically
-javascript:
-  - "*.js"
-  - "*.jsx"
-  - "*.mjs"
+  - "tsconfig.json"

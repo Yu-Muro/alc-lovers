@@ -19,12 +19,19 @@
             "package.json",
             "bun.lock",
             ".env*",
-            "**/.open-next/**"
+            ".open-next/**"
+        ],
+        "cSpell.words": [
+            "hyperdrive",
+            "drizzle",
         ],
         "files.exclude": {
             "**/.wrangler": true,
             "**/.open-next": true,
             "**/.next": true
+        },
+        "editor.codeActionsOnSave": {
+            "source.organizeImports.biome": "explicit"
         },
 		"[typescript]": {
 			"editor.defaultFormatter": "biomejs.biome",
@@ -34,8 +41,9 @@
 			"editor.defaultFormatter": "biomejs.biome",
 			"editor.formatOnSave": true
 		},
-		"editor.codeActionsOnSave": {
-			"source.organizeImports.biome": "explicit"
-		}
+        "[jsonc]": {
+            "editor.defaultFormatter": "biomejs.biome",
+            "editor.formatOnSave": true,
+        }
     }
 }

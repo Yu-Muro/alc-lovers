@@ -1,3 +1,4 @@
+import bcrypt from 'bcryptjs';
 import { eq } from 'drizzle-orm';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { users } from '../../db/schema';
@@ -19,13 +20,20 @@ export class CreateUserUseCase {
                 throw new Error('このメールアドレスは既に使用されています');
             }
 
+            // Hash password before saving
+            const saltRounds = 12;
+            const hashedPassword = await bcrypt.hash(
+                input.password,
+                saltRounds,
+            );
+
             // Create new user
             const [newUser] = await this.db
                 .insert(users)
                 .values({
                     name: input.name,
                     email: input.email,
-                    password: input.password,
+                    password: hashedPassword,
                     role: input.role,
                 })
                 .returning();

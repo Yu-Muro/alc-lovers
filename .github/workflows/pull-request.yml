@@ -61,19 +61,16 @@ jobs:
         run: |
           cd apps/backend
           bun run lint
-        continue-on-error: true
 
       - name: Type check backend
         run: |
           cd apps/backend
           bun run type-check
-        continue-on-error: true
 
       - name: Test backend
         run: |
           cd apps/backend
           bun run test
-        continue-on-error: true
 
       - name: Build backend
         run: |
@@ -104,19 +101,16 @@ jobs:
         run: |
           cd apps/frontend
           bun run lint
-        continue-on-error: true
 
       - name: Type check frontend
         run: |
           cd apps/frontend
           bun run type-check
-        continue-on-error: true
 
       - name: Test frontend
         run: |
           cd apps/frontend
           bun run test
-        continue-on-error: true
 
       - name: Build frontend
         run: |

@@ -27,6 +27,7 @@
             "source.organizeImports.biome": "explicit"
         },
         "files.exclude": {
+            "**/.git": true,
             "**/.wrangler": true,
             "**/.open-next": true,
             "**/.next": true

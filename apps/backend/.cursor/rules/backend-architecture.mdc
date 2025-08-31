@@ -1,0 +1,146 @@
+# Backend Architecture & Coding Rules
+
+## Architecture Overview
+
+This backend follows Clean Architecture principles with the following structure:
+
+```
+src/
+├── domain/                    # Entities, Value Objects (no dependencies)
+├── use-cases/                 # Application Business Rules
+├── interface-adapters/        # Repository implementations
+├── presentation/              # Web framework layer (Hono)
+├── infrastructure/            # Validators, external tools
+└── shared/                   # Common utilities, DI container
+```
+
+## Dependency Direction
+
+```
+Frameworks & Drivers → Interface Adapters → Use Cases → Domain
+```
+
+- **Domain**: Innermost layer, no dependencies
+- **Use Cases**: Only depends on Domain
+- **Interface Adapters**: Depends on Use Cases and Domain
+- **Frameworks & Drivers**: Outermost layer, can depend on everything
+
+## Technology Stack
+
+- **Runtime**: Cloudflare Workers
+- **Framework**: Hono.js
+- **Language**: TypeScript
+- **Package Manager**: Bun
+- **Linting/Formatting**: Biome
+- **Validation**: Zod
+- **Architecture**: Clean Architecture
+
+## Coding Standards
+
+### File Naming
+- Use PascalCase for classes and interfaces: `TodoController.ts`
+- Use camelCase for functions and variables: `createTodo`
+- Use kebab-case for files: `todo-controller.ts`
+
+### Directory Structure
+- Follow the Clean Architecture layers strictly
+- Keep domain entities pure (no external dependencies)
+- Use dependency injection for external dependencies
+- Implement repository pattern for data access
+
+### TypeScript Rules
+- Avoid `any` type - use proper typing
+- Use interfaces for contracts
+- Prefer readonly properties where possible
+- Use strict TypeScript configuration
+
+### Error Handling
+- Create custom exception classes in domain layer
+- Use Result pattern for error handling
+- Implement proper HTTP status codes in controllers
+
+### Validation
+- Use Zod for input validation
+- Validate at the presentation layer
+- Keep business rules in use cases
+
+## API Design
+
+### Endpoints
+- Use RESTful conventions
+- Prefix with `/api` for API routes
+- Use proper HTTP methods (GET, POST, PUT, DELETE)
+- Return consistent JSON responses
+
+### Response Format
+```typescript
+{
+  success: boolean;
+  data?: any;
+  error?: string;
+  message?: string;
+}
+```
+
+## Database & Persistence
+
+### Current State
+- Using InMemory repository (temporary)
+- Plan to implement Prisma or Cloudflare D1
+
+### Repository Pattern
+- Define interfaces in domain layer
+- Implement in interface-adapters layer
+- Use dependency injection for switching implementations
+
+## Testing Guidelines
+
+### Test Structure
+- Unit tests for each layer
+- Integration tests for use cases
+- E2E tests for API endpoints
+
+### Test Naming
+- Use descriptive test names
+- Follow pattern: `describe('ClassName', () => {})`
+- Use `it('should do something', () => {})` for test cases
+
+## Development Workflow
+
+### Scripts
+- `bun run dev` - Start development server
+- `bun run build` - Build for production
+- `bun run lint` - Run Biome linter
+- `bun run type-check` - Run TypeScript type checking
+
+### Code Quality
+- Run linting before commits
+- Ensure type checking passes
+- Follow Clean Architecture principles
+- Write meaningful commit messages
+
+## Security Considerations
+
+- Validate all inputs
+- Use CORS properly
+- Implement authentication (future)
+- Sanitize data before database operations
+- Use environment variables for secrets
+
+## Performance
+
+- Optimize for Cloudflare Workers environment
+- Use efficient data structures
+- Minimize external API calls
+- Implement proper caching strategies
+
+## Deployment
+
+- Deploy to Cloudflare Workers
+- Use environment-specific configurations
+- Monitor performance and errors
+- Implement proper logging
+description:
+globs:
+alwaysApply: true
+---

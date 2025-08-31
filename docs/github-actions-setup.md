@@ -64,14 +64,17 @@ GitHubリポジトリの設定で以下のSecretsを設定してください：
 ### デプロイワークフロー（deploy-dev.yml）
 
 #### トリガー条件
+
 - `develop`ブランチへのpush
 
 ### Pull Requestワークフロー（pull-request.yml）
 
 #### トリガー条件
+
 - `main`または`develop`ブランチへのPull Request作成・更新
 
 #### 実行内容
+
 - [dorny/paths-filter](https://github.com/dorny/paths-filter)による変更検知（バックエンド・フロントエンド・共有設定）
 - 条件付きビルド・テスト
 - Biomeリンター・フォーマットチェック
@@ -81,9 +84,11 @@ GitHubリポジトリの設定で以下のSecretsを設定してください：
 ### 厳密テストワークフロー（strict-test.yml）
 
 #### トリガー条件
+
 - `main`ブランチへのPull Request作成・更新
 
 #### 実行内容
+
 - 全体的なビルド・テスト
 - Biomeリンター・フォーマットチェック
 - セキュリティ監査
@@ -92,9 +97,11 @@ GitHubリポジトリの設定で以下のSecretsを設定してください：
 ### Dependabot自動承認ワークフロー（dependabot-auto-approve.yml）
 
 #### トリガー条件
+
 - DependabotによるPull Request作成・更新
 
 #### 実行内容
+
 - 依存関係の更新タイプを検知
 - マイナー・パッチアップデートの自動承認・マージ
 - メジャーアップデートの手動レビュー要求
@@ -138,6 +145,7 @@ GitHubリポジトリの設定で以下のSecretsを設定してください：
 ## 依存関係管理
 
 ### Dependabot自動アップデート
+
 - **スケジュール**: 毎週月曜日 09:00
 - **対象**: npm、GitHub Actions
 - **自動承認**: マイナー・パッチアップデート

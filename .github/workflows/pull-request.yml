@@ -61,19 +61,16 @@ jobs:
         run: |
           cd apps/backend
           bun run lint
-        continue-on-error: true
 
       - name: Type check backend
         run: |
           cd apps/backend
           bun run type-check
-        continue-on-error: true
 
       - name: Test backend
         run: |
           cd apps/backend
           bun run test
-        continue-on-error: true
 
       - name: Build backend
         run: |
@@ -104,19 +101,16 @@ jobs:
         run: |
           cd apps/frontend
           bun run lint
-        continue-on-error: true
 
       - name: Type check frontend
         run: |
           cd apps/frontend
           bun run type-check
-        continue-on-error: true
 
       - name: Test frontend
         run: |
           cd apps/frontend
           bun run test
-        continue-on-error: true
 
       - name: Build frontend
         run: |
@@ -170,6 +164,14 @@ jobs:
     timeout-minutes: 5
     needs: [lint-and-test-backend, lint-and-test-frontend, build-cloudflare-frontend]
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup GitHub CLI
+        uses: cli/setup-gh@v2
+        with:
+          version: latest
+
       - name: Dependabot metadata
         id: metadata
         uses: dependabot/fetch-metadata@v2

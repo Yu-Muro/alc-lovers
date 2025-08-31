@@ -22,6 +22,8 @@ app/
 - **Linting/Formatting**: Biome
 - **Deployment**: Cloudflare Workers (via OpenNext)
 - **Fonts**: Geist (Google Fonts)
+- **API Client**: Hono Client for type-safe API calls
+- **Backend Integration**: Direct import from backend package
 
 ## Coding Standards
 
@@ -34,8 +36,9 @@ app/
 ### Directory Structure
 - Follow Next.js App Router conventions
 - Keep components in appropriate directories
-- Use `types/` for TypeScript definitions
-- Use `utils/` for utility functions
+- Use `utils/` for utility functions (API client)
+- Import backend types directly for type safety
+- Use 'use client' directive for client components
 
 ### TypeScript Rules
 - Avoid `any` type - use proper typing
@@ -91,10 +94,16 @@ export default function PageName() {
 ## API Integration
 
 ### API Client
-- Use the provided API client in `utils/client.ts`
+- Use Hono Client for type-safe API calls
+- Import backend types directly: `import type { AppType } from 'backend/src'`
 - Handle loading and error states properly
 - Implement proper error handling
 - Use TypeScript for API response types
+
+### Backend Integration
+- Direct import from backend package for type safety
+- Use environment variables for API URLs
+- Implement proper error boundaries for API calls
 
 ### Data Fetching
 - Use React Query or SWR for data fetching (future)

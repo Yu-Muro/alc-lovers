@@ -6,12 +6,16 @@ This backend follows Clean Architecture principles with the following structure:
 
 ```
 src/
-├── domain/                    # Entities, Value Objects (no dependencies)
+├── db/                        # Database schema and connection
+│   ├── schema.ts             # Drizzle ORM schema definitions
+│   └── connection.ts         # Database client setup
 ├── use-cases/                 # Application Business Rules
-├── interface-adapters/        # Repository implementations
+│   └── user/                 # User-related use cases
 ├── presentation/              # Web framework layer (Hono)
-├── infrastructure/            # Validators, external tools
-└── shared/                   # Common utilities, DI container
+│   ├── controllers/          # Request handlers
+│   └── routes/               # Route definitions
+└── infrastructure/            # Validators, external tools
+    └── validators/           # Zod validation schemas
 ```
 
 ## Dependency Direction
@@ -33,6 +37,8 @@ Frameworks & Drivers → Interface Adapters → Use Cases → Domain
 - **Package Manager**: Bun
 - **Linting/Formatting**: Biome
 - **Validation**: Zod
+- **Database**: PostgreSQL with Drizzle ORM
+- **Authentication**: bcryptjs for password hashing
 - **Architecture**: Clean Architecture
 
 ## Coding Standards
@@ -72,26 +78,41 @@ Frameworks & Drivers → Interface Adapters → Use Cases → Domain
 - Use proper HTTP methods (GET, POST, PUT, DELETE)
 - Return consistent JSON responses
 
+### Current API Endpoints
+- `GET /api/users` - Get all users
+- `POST /api/users` - Create new user
+
 ### Response Format
 ```typescript
+// Success response
 {
-  success: boolean;
-  data?: any;
-  error?: string;
-  message?: string;
+  users: User[] | user: User
+}
+
+// Error response
+{
+  error: string;
+  details?: ValidationError[];
 }
 ```
 
 ## Database & Persistence
 
 ### Current State
-- Using InMemory repository (temporary)
-- Plan to implement Prisma or Cloudflare D1
+- Using PostgreSQL with Drizzle ORM
+- Cloudflare Hyperdrive for database connection
+- Docker Compose for local development
 
-### Repository Pattern
-- Define interfaces in domain layer
-- Implement in interface-adapters layer
-- Use dependency injection for switching implementations
+### Database Schema
+- User management with authentication
+- Proper password hashing with bcryptjs
+- Soft delete support with deletedAt field
+
+### Database Operations
+- Use Drizzle ORM for type-safe queries
+- Implement proper error handling
+- Use transactions for data consistency
+- Follow database naming conventions
 
 ## Testing Guidelines
 
@@ -112,6 +133,9 @@ Frameworks & Drivers → Interface Adapters → Use Cases → Domain
 - `bun run build` - Build for production
 - `bun run lint` - Run Biome linter
 - `bun run type-check` - Run TypeScript type checking
+- `bun run db:generate` - Generate Drizzle migrations
+- `bun run db:migrate` - Run database migrations
+- `bun run db:studio` - Open Drizzle Studio
 
 ### Code Quality
 - Run linting before commits

@@ -28,11 +28,15 @@ alc-lovers/
 - **Framework**: Hono.js
 - **Architecture**: Clean Architecture
 - **Validation**: Zod
+- **Database**: PostgreSQL with Drizzle ORM
+- **Authentication**: bcryptjs for password hashing
 
 ### Frontend
 - **Framework**: Next.js 15 (App Router)
 - **Styling**: Tailwind CSS v4
 - **Deployment**: Cloudflare Workers (OpenNext)
+- **API Client**: Hono Client for type-safe API calls
+- **Backend Integration**: Direct import from backend package
 
 ## Coding Standards
 
@@ -83,13 +87,18 @@ alc-lovers/
 2. Clone repository
 3. Run `bun install` in root
 4. Set up environment variables
-5. Start development servers
+5. Start PostgreSQL database with Docker Compose
+6. Run database migrations
+7. Start development servers
 
 ### Scripts
 - `bun run dev` - Start development servers
 - `bun run build` - Build all packages
 - `bun run lint` - Run Biome linter
 - `bun run type-check` - Run TypeScript type checking
+- `bun run db:generate` - Generate database migrations
+- `bun run db:migrate` - Run database migrations
+- `bun run db:studio` - Open database management UI
 
 ### Code Quality
 - Run linting before commits
@@ -104,6 +113,8 @@ alc-lovers/
 - Use GitHub Secrets for production
 - Never commit sensitive data
 - Document required environment variables
+- Configure database connection strings
+- Set up API URLs for frontend-backend communication
 
 ### Configuration
 - Use environment-specific configs

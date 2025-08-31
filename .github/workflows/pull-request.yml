@@ -170,6 +170,14 @@ jobs:
     timeout-minutes: 5
     needs: [lint-and-test-backend, lint-and-test-frontend, build-cloudflare-frontend]
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup GitHub CLI
+        uses: cli/setup-gh@v2
+        with:
+          version: latest
+
       - name: Dependabot metadata
         id: metadata
         uses: dependabot/fetch-metadata@v2

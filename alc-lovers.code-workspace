@@ -6,12 +6,10 @@
     ],
     "settings": {
         "cSpell.ignorePaths": [
-            ".git/**",
             "*.code-workspace",
             ".vscode",
             ".vscode-insiders",
             "vscode-extension",
-            "**/settings.json",
             "**/.gitignore",
             "**.log",
             "**/build/**",
@@ -19,8 +17,15 @@
             "package.json",
             "bun.lock",
             ".env*",
-            "**/.open-next/**"
+            ".open-next/**"
         ],
+        "cSpell.words": [
+            "hyperdrive",
+            "drizzle",
+        ],
+        "editor.codeActionsOnSave": {
+            "source.organizeImports.biome": "explicit"
+        },
         "files.exclude": {
             "**/.wrangler": true,
             "**/.open-next": true,
@@ -34,8 +39,9 @@
             "editor.defaultFormatter": "biomejs.biome",
             "editor.formatOnSave": true
         },
-        "editor.codeActionsOnSave": {
-            "source.organizeImports.biome": "explicit"
+        "[jsonc]": {
+            "editor.defaultFormatter": "biomejs.biome",
+            "editor.formatOnSave": true,
         }
     }
 }

@@ -1,8 +1,9 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
-import { createTodoRoutes } from './presentation/routes/todoRoutes';
+import type { Env } from './db/connection';
+import { createUserRoutes } from './presentation/routes/userRoutes';
 
-const app = new Hono();
+const app = new Hono<{ Bindings: Env }>();
 
 app.use(
     '*',
@@ -10,9 +11,8 @@ app.use(
         origin: '*',
     }),
 );
-
-const appWithRoutes = app.route('/api', createTodoRoutes());
+const appWithRoutes = app.route('/api', createUserRoutes());
 
 export type AppType = typeof appWithRoutes;
 
-export default appWithRoutes;
+export default app;

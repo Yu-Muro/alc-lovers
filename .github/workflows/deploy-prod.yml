@@ -1,0 +1,133 @@
+name: Deploy to Production Environment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      backend-changed: ${{ steps.filter.outputs.backend }}
+      frontend-changed: ${{ steps.filter.outputs.frontend }}
+      shared-changed: ${{ steps.filter.outputs.shared }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect changes
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: .github/filters.yaml
+
+      - name: Show changed files
+        run: |
+          echo "Backend changes: ${{ steps.filter.outputs.backend }}"
+          echo "Frontend changes: ${{ steps.filter.outputs.frontend }}"
+          echo "Shared changes: ${{ steps.filter.outputs.shared }}"
+
+  deploy-backend:
+    needs: detect-changes
+    if: |
+      needs.detect-changes.outputs.backend-changed == 'true' ||
+      needs.detect-changes.outputs.shared-changed == 'true'
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: |
+          cd apps/backend
+          bun install
+
+      - name: Deploy to Cloudflare Workers (Production)
+        id: deploy-backend
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy --env prod
+          workingDirectory: apps/backend
+          secrets: |
+            DATABASE_URL
+          environment: prod
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      - name: Notify deployment
+        run: |
+          echo "✅ Backend deployed to production environment successfully!"
+          echo "Worker: alc-lovers"
+          echo "Deployment URL: ${{ steps.deploy-backend.outputs.deployment-url }}"
+
+  deploy-frontend:
+    needs: detect-changes
+    if: |
+      needs.detect-changes.outputs.frontend-changed == 'true' ||
+      needs.detect-changes.outputs.shared-changed == 'true'
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: |
+          cd apps/frontend
+          bun install
+
+      - name: Build frontend
+        run: |
+          cd apps/frontend
+          bun run build:cloudflare
+        env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+
+      - name: Build and deploy to Cloudflare Workers (Production)
+        id: deploy-frontend
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy --env prod
+          workingDirectory: apps/frontend
+          secrets: |
+            NEXT_PUBLIC_API_URL
+          environment: prod
+        env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+
+      - name: Notify deployment
+        run: |
+          echo "✅ Frontend deployed to production environment successfully!"
+          echo "Worker: alc-lovers-frontend"
+          echo "Deployment URL: ${{ steps.deploy-frontend.outputs.deployment-url }}"
+
+  notify-no-changes:
+    needs: detect-changes
+    if: |
+      needs.detect-changes.outputs.backend-changed == 'false' &&
+      needs.detect-changes.outputs.frontend-changed == 'false' &&
+      needs.detect-changes.outputs.shared-changed == 'false'
+    runs-on: ubuntu-latest
+    steps:
+      - name: No changes detected
+        run: |
+          echo "ℹ️ No changes detected in backend or frontend"
+          echo "Skipping deployment to production environment"

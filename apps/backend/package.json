@@ -1,5 +1,6 @@
 {
     "name": "backend",
+    "version": "0.0.0",
     "main": "src/index.ts",
     "types": "src/index.ts",
     "scripts": {
@@ -10,15 +11,26 @@
         "lint": "biome check ./src",
         "lint:fix": "biome check --write --unsafe ./src",
         "type-check": "tsc --noEmit",
-        "test": "echo 'No tests configured yet'"
+        "test": "echo 'No tests configured yet'",
+        "db:generate": "drizzle-kit generate",
+        "db:migrate": "drizzle-kit migrate",
+        "db:studio": "drizzle-kit studio"
     },
     "dependencies": {
         "@hono/zod-validator": "^0.7.2",
-        "hono": "^4.7.2",
+        "@types/bcryptjs": "^3.0.0",
+        "bcryptjs": "^3.0.2",
+        "dotenv": "^17.2.1",
+        "drizzle-orm": "^0.44.5",
+        "hono": "^4.9.4",
+        "postgres": "^3.4.7",
         "zod": "^4.0.17"
     },
     "devDependencies": {
         "@cloudflare/workers-types": "^4.20250214.0",
+        "@types/node": "^24.3.0",
+        "drizzle-kit": "^0.31.4",
+        "tsx": "^4.20.5",
         "wrangler": "^4.28.1"
     }
 }

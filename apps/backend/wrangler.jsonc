@@ -8,10 +8,22 @@
     ],
     "env": {
         "dev": {
-            "name": "alc-lovers-dev"
+            "name": "alc-lovers-dev",
+            "hyperdrive": [
+                {
+                    "binding": "HYPERDRIVE",
+                    "id": "1555f918f1924660baf63ca24f36c613"
+                }
+            ]
         },
         "prod": {
-            "name": "alc-lovers"
+            "name": "alc-lovers",
+            "hyperdrive": [
+                {
+                    "binding": "HYPERDRIVE",
+                    "id": "337e14e069ae4ada90aa6c010d60178d"
+                }
+            ]
         }
     }
 }

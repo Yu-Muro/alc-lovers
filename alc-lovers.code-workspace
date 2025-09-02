@@ -20,8 +20,10 @@
             ".open-next/**"
         ],
         "cSpell.words": [
-            "hyperdrive",
+            "dorny",
             "drizzle",
+            "hyperdrive",
+            "varchar"
         ],
         "editor.codeActionsOnSave": {
             "source.organizeImports.biome": "explicit"

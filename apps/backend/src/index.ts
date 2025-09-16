@@ -6,6 +6,7 @@ import { createUserRoutes } from './presentation/routes/userRoutes';
 
 const app = new Hono<{ Bindings: Env }>();
 
+// CORS設定（すべてのオリジンを許可）
 app.use(
     '*',
     cors({
@@ -13,13 +14,14 @@ app.use(
     }),
 );
 
-// セキュリティヘッダーを追加
+// セキュリティヘッダーを追加（HSTS: HTTP Strict Transport Security）
 app.use(
     '*',
     secureHeaders({
         strictTransportSecurity: 'max-age=31536000; includeSubDomains',
     }),
 );
+// APIルートを設定
 const appWithRoutes = app.route('/api', createUserRoutes());
 
 export type AppType = typeof appWithRoutes;

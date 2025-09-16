@@ -12,17 +12,17 @@ export interface Env {
 }
 
 export function createDatabaseClient(env: Env) {
-    // Create a database client with postgres.js driver connected via Hyperdrive
+    // Hyperdrive経由で接続されたpostgres.jsドライバーでデータベースクライアントを作成
     const sql = postgres(env.HYPERDRIVE.connectionString, {
-        // Limit the connections for the Worker request to 5 due to Workers' limits on concurrent external connections
+        // Workersの同時外部接続制限により、Workerリクエストの接続数を5に制限
         max: 5,
-        // If you are not using array types in your Postgres schema, disable `fetch_types` to avoid an additional round-trip (unnecessary latency)
+        // Postgresスキーマで配列型を使用していない場合、追加のラウンドトリップ（不要な遅延）を避けるために`fetch_types`を無効化
         fetch_types: false,
     });
 
-    // Create the Drizzle client with the postgres.js connection
+    // postgres.js接続でDrizzleクライアントを作成
     return drizzle(sql);
 }
 
-// Export the users table for use in other files
+// 他のファイルで使用するためにusersテーブルをエクスポート
 export { users };

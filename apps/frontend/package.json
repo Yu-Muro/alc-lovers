@@ -16,7 +16,7 @@
         "test": "echo 'No tests configured yet'"
     },
     "dependencies": {
-        "@opennextjs/cloudflare": "^1.6.5",
+        "@opennextjs/cloudflare": "^1.8.3",
         "backend": "^0.0.0",
         "hono": "^4.9.7",
         "next": "15.5.3",

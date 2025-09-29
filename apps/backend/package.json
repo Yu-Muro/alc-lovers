@@ -29,7 +29,7 @@
     "devDependencies": {
         "@cloudflare/workers-types": "^4.20250922.0",
         "@types/node": "^24.4.0",
-        "drizzle-kit": "^0.31.4",
+        "drizzle-kit": "^0.31.5",
         "tsx": "^4.20.5",
         "wrangler": "^4.38.0"
     }

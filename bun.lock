@@ -16,7 +16,7 @@
         "bcryptjs": "^3.0.2",
         "dotenv": "^17.2.2",
         "drizzle-orm": "^0.44.5",
-        "hono": "^4.9.9",
+        "hono": "^4.9.10",
         "postgres": "^3.4.7",
         "zod": "^4.1.11",
       },
@@ -34,7 +34,7 @@
       "dependencies": {
         "@opennextjs/cloudflare": "^1.9.0",
         "backend": "^0.0.0",
-        "hono": "^4.9.9",
+        "hono": "^4.9.10",
         "next": "15.5.4",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
@@ -730,7 +730,7 @@
 
     "hasown": ["hasown@2.0.2", "", { "dependencies": { "function-bind": "^1.1.2" } }, "sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ=="],
 
-    "hono": ["hono@4.9.9", "", {}, "sha512-Hxw4wT6zjJGZJdkJzAx9PyBdf7ZpxaTSA0NfxqjLghwMrLBX8p33hJBzoETRakF3UJu6OdNQBZAlNSkGqKFukw=="],
+    "hono": ["hono@4.9.10", "", {}, "sha512-AlI15ijFyKTXR7eHo7QK7OR4RoKIedZvBuRjO8iy4zrxvlY5oFCdiRG/V/lFJHCNXJ0k72ATgnyzx8Yqa5arug=="],
 
     "http-errors": ["http-errors@2.0.0", "", { "dependencies": { "depd": "2.0.0", "inherits": "2.0.4", "setprototypeof": "1.2.0", "statuses": "2.0.1", "toidentifier": "1.0.1" } }, "sha512-FtwrG/euBzaEjYeRqOgly7G0qviiXoJWnvEH2Z1plBdXgbyjv34pHTSb9zoeHMyDy33+DWy5Wt9Wo+TURtOYSQ=="],
 

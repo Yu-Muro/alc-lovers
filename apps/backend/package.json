@@ -20,7 +20,7 @@
         "@hono/zod-validator": "^0.7.3",
         "@types/bcryptjs": "^3.0.0",
         "bcryptjs": "^3.0.2",
-        "dotenv": "^17.2.2",
+        "dotenv": "^17.2.3",
         "drizzle-orm": "^0.44.5",
         "hono": "^4.9.10",
         "postgres": "^3.4.7",

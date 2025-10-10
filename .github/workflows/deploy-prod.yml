@@ -5,6 +5,8 @@ on:
     branches:
       - main
 
+concurrency: build_and_deploy_to_prod
+
 jobs:
   detect-changes:
     runs-on: ubuntu-latest

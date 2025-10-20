@@ -1,0 +1,50 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "cSpell.ignorePaths": [
+            "*.code-workspace",
+            ".vscode",
+            ".vscode-insiders",
+            "vscode-extension",
+            "**/.gitignore",
+            "**.log",
+            "**/build/**",
+            "node_modules",
+            "package.json",
+            "bun.lock",
+            ".env*",
+            ".open-next/**"
+        ],
+        "cSpell.words": [
+            "dorny",
+            "drizzle",
+            "hyperdrive",
+            "varchar"
+        ],
+        "editor.codeActionsOnSave": {
+            "source.organizeImports.biome": "explicit"
+        },
+        "files.exclude": {
+            "**/.git": true,
+            "**/.wrangler": true,
+            "**/.open-next": true,
+            "**/.next": true
+        },
+        "[typescript]": {
+            "editor.defaultFormatter": "biomejs.biome",
+            "editor.formatOnSave": true
+        },
+        "[typescriptreact]": {
+            "editor.defaultFormatter": "biomejs.biome",
+            "editor.formatOnSave": true
+        },
+        "[jsonc]": {
+            "editor.defaultFormatter": "biomejs.biome",
+            "editor.formatOnSave": true,
+        }
+    }
+}

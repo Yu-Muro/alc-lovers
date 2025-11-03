@@ -1,7 +1,7 @@
 {
     "name": "alc-lovers",
     "devDependencies": {
-        "@biomejs/biome": "2.2.7"
+        "@biomejs/biome": "2.3.1"
     },
     "private": true,
     "workspaces": ["apps/*"]
